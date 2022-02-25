@@ -1,4 +1,4 @@
-# angulargetstarted
+#### angulargetstarted
 
 ## Créer la liste des produits
 Dans cette section nous mettrons à jour l'application afin qu'elle affiche une liste de produits.
@@ -133,9 +133,9 @@ La ligne h4 utilise un currency pipe pour transformer un nombre en une chaine de
 
 Quand les utilisateurs cliquent sur le nom d'un produit de la liste, le routeur navigue vers l'URL distincter du produit, le routeur affiche les détails du produit.
 
-### Gérer des données
+### Gérer les données
 
- A ce stade Nous avons deux vues une liste produit et les détails produit.
+ A ce stade Nous avons deux vues, une liste produit et les détails produit.
  L'utilisateur peut cliquer sur le nom d'un produit pour voir les détails du produit dans une nouvelle vue, avec une URL ou route distincte.
  Cette étape du tutoriel nous guide pour créer un panier de courses avec les phases suivantes :
  1. Mettre à jour la vue des détails produits pour inclure un bouton Achat qui ajoute le produit actuel à une liste de produits que le service du panier gère.
@@ -151,3 +151,94 @@ Actuellement, les utilisateurs peuvent voir les informations d'un produit et l'a
 La prochaine étape est de construire une façon pour les utilisateur d'ajouter un produit à leur panier.
 Cette section explique comment ajouter un bouton acheter et installer un service de panier pour stocker des informations à propos des produits dans le panier.
 
+## Définissons un service de panier
+
+Cette section consiste à créer un CartService qui piste les produits ajoutés au panier
+
+#1  on génère les fichiers du composant avec la commande ng generate service cart
+
+#2 On importe l'interface Product depuis le ./products.ts à l'intérieur du fichier cart.service.ts et dans la classe CartService.
+On définit une propriété items pour stocker le tableau du produit sélectionné dans le panier.
+
+#3 on définit les méthodes pour ajouter les produits au panier, on retourne les produits du panier et on éfface les produits du panier.
+
+- la méthode addToCart() ajoute un produit à un tableau de produits
+
+- la méthode getItems()collecte les produits que les utilisateurs ajoute au panier et retourne chaque produit avec sa quantité associée
+
+- la méthode clearCart() retourne un tableau vide de produit ce qui vide le panier
+
+## On utilise le service de panier
+
+On utilise le CartService pour ajouter un produit au panier
+
+#1 On importe le service de panier dans product-details.component.ts
+
+#2 On inject le service de panier en l'ajoutant au constructor()
+
+#3 On définit la méthode addToCart() qui ajoute le produit sélectionné au panier
+
+- la méthode addToCart() prend le produit sélectionné comme argument
+-  la méthode addToCart() utilise le CartService et addToCart pour ajouter le produit au panier
+-  la méthode addToCart() affiche un message disant que vous avez ajouté un produit au panier
+
+#4 Dans product-details.component.html on ajoute un bouton avec l'étiquette Buy et on lui connecte l'événement click()
+à la méthode addToCart. Ce code met à jour les détails du produit du gabarit avec un bouton Buy qui ajoute le produit sélectionné au panier
+
+#5 on vérifie que le bouton Buy apparait comme attendu en rafraichissant l'application et en cliquant sur le nom d'un produit pour afficher ses détails
+
+#6 On clique sur le bouton Buy pour ajouter le produit à la liste stockée de produits dans le panier qui affiche un message de confirmation
+
+### Créer la vue du panier
+
+Pour que les clients puissent voir leur panier on peut créer une vue du panier en deux étapes:
+1. On crée un composant Panier et on configure les routes vers le nouveau composangt 
+2. On affiche les produits du panier
+
+## Parametrer le composant du Panier
+
+Pour créer la vue du panier, on suit les mêmes étapes que l'on a fait pour créer le composant ProductDetailsComponent et on configure les routes vers le nouveau composant
+
+#1 On génère un nouveau composant nommé cart dans les terminal 
+cette commandegénère les fichiers et gabarits et feuilles de style associés
+
+#2 On note que le nouveau composant CartComponent est ajouté à la déclaration dans app.module.ts
+
+#3 toujours dans app.module.ts on ajout une route pour le composant CartComponent avec le path cart
+
+#4 On met à jour le bouton Checkout pour qu'il fasse une route vers /cart URL. Dans top-bar.component.html, on ajoute une directive routerLink  qui pointe vers /cart
+
+#5 On vérifie que le nouveau CartComponent fonctionne comme attendu en cliquant sur le bouton Checkout. On peut voir "cart works"
+
+## Afficher les produits du panier
+
+Cette section montre comment utiliser le service de panier pour afficher les produits dans le panier
+
+#1 Dans cart.component.ts on importe CartService depuis cart.service.ts.
+
+#2 On injecte les CartService pour le composant CartComponent puisse l'utiliser en l'ajoutant au constuctor()
+
+#3 On définit les propriétés produits pour stokcer les produits dans le panier
+le code installe les produits en utilisant la méthode CartService getItems(). On a définie cette méthode quand on a créé cart.service.ts
+
+#4 On met à jour le gabarit du panier avec un en-tête et on utilise une div avec *ngFor pour afficher chaque produit avec son nom et prix.
+
+#5 On vérifie que le panier fonctionne comme prévu :
+- On clique My Store
+- on clique sur un produit pour afficher ses détails
+- on clique sur Buy pour jaouter le produit au panier
+- on clique checkout pour voir le panier
+
+### Récupérer les prix de livraison
+
+Les serveurs retourne souvent les données sous forme de flux. Les flux sont utiles car il srendenet facile la transformation de données retournées et font des modifications de la manière dont on demande les données. Angular HttpClient est une fonction intégrée pour aller chercher des données des API externes et leur fournit à nos applications dans un flux.
+
+Cette section nous montre comment utiliser HttpClient pour récupérer les prix de livraison depuis un fichier externe
+
+## Configurer AppModule pour utiliser HttpClient
+
+pour utiliser HttpClient d'Angular on doit configurer notre application pour utiliser HttpLCientModule.
+
+Celui-ci enregistre les fournisseurs dont notre appli a besoin pour utiliser le service HttpClient au travers de notre appli
+
+#1
