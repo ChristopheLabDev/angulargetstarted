@@ -84,3 +84,70 @@ Dans product-list.component.html liez <app-product-alerts> à la méthode onNoti
 
 ### ajouter la navigation
 
+Nous allons ajouter des fonctionnalités à l'application :
+1. taper une URL dans la barre d'adresse pour naviguer vers la page produit correspondante
+2. cliquer des liens pour naviguer à l'intérieur de notre application single-page
+3. Cliquer les les boutons suivant et retour du navigateur pour naviguer dans l'historique intuitivement
+
+## Associer un chemin URL avec un composant
+
+L'app uttilise déjà le Router Angular pour naviguer vers le composant ProductListComponent. Cette section montre comment définir une route pour montrer les détails individuel d'un produit
+
+#1 Générer un nouveau composant pour les détails produit.
+Dans le terminal avec ng generate component product-details.
+
+#2 Dans app.module.ts ajoutez une route pour les détails produit avec path de products/:productId et 
+ProductDetailsComponent pour le composant
+
+#3 Ouvrir le product-list.component.html
+
+#4 Modifier le nom de l'ancre du produit pour inclure un routerLink avec le product.id en tant que paramètre
+la directive routerLink nous aide à personnaliser l'ancre. Dans ce cas la route ou URL contient un segment fixe /products. Le segment final est variable en insérant la propriété id du produit courant.
+Par exempl, l'URL pour un produit avec l'id 1 devrait ressembler à https://getting-started-myfork.stackblitz.io/products/1
+
+#5 vérifier que le router fonctionne comme prévu en cliquant le nom du produit. L'application devrait afficher ProductDetailsComponent qui dit actuellement 
+ "product-details works!"
+
+Notez que l'URL dans la fenêtre de prévisualisation change le segment final est products/# où #est le nombre de la route sur laquelle on a cliqué.
+
+## Voir les détails produits
+
+Le composant ProductDetailsComponent gère l'affichage de chaque produit. Le routeur Angular affiche l'URL du navigateur bas& sur le composant et définit les routes.
+
+Dans cette section vous utiliserez le routeur Angular pour combinenr les données produit et l'information de la route pour afficher les détails spécifique pour chaque produit.
+
+#1 Dans product-details.component.ts importons ActivatedRoute depuis @angular/router, et le tableau des produits depuis ../products.
+
+#2 Définissons la propriété de produit
+
+#3 Injectons ActivatedRoute dans le constructor en ajoutant private route: ActivatedRoute en tant qu'argumant à l'intérieur des parenthèses du constructor
+
+ActivatedRoute est spécifique à chaque composant que le routeur Angular charge. ActivatedRoute contient des informations à propos de la route et de ses paramètres.
+En injectant ActivatedRoute nous configurons le composant pour utiliser un service. L'étape Gestion des Données couvre les services en détail.
+
+#4 Dans la méthode ngOnInit() extrayons le productId depuis les paramètres de la route et trouvons le produit correspondant dans le tableau produit.
+
+#5 Mettons à jour le gabartit ProductDetailsComponent pour afficher les détails produits avec un *ngIf. Si le prodit existe la div est rendue dynamiquement avec un nom, un prix et une description
+
+La ligne h4 utilise un currency pipe pour transformer un nombre en une chaine de caractère de monnaie. Un tuyau est une façon de transformer des données dans notre gabarit HTML. 
+
+Quand les utilisateurs cliquent sur le nom d'un produit de la liste, le routeur navigue vers l'URL distincter du produit, le routeur affiche les détails du produit.
+
+### Gérer des données
+
+ A ce stade Nous avons deux vues une liste produit et les détails produit.
+ L'utilisateur peut cliquer sur le nom d'un produit pour voir les détails du produit dans une nouvelle vue, avec une URL ou route distincte.
+ Cette étape du tutoriel nous guide pour créer un panier de courses avec les phases suivantes :
+ 1. Mettre à jour la vue des détails produits pour inclure un bouton Achat qui ajoute le produit actuel à une liste de produits que le service du panier gère.
+ 2. Ajouter un composant panier qui affiche les produits dans le panier
+ 3. ajouter un composant livraison qui récupère les prix de livraison pour les produits dans le panier en utilisant HttpClient pour récupérer des données depuis un fichier .json
+
+## Créer un service de panier d'achat.
+
+Dans Angular, un service est une instance d'une classe que l'on peut rendre disponible pour toute partie de l'application en utilisant le système d'injection de dépendance.
+
+Actuellement, les utilisateurs peuvent voir les informations d'un produit et l'application peut simuler le partage et les notifications à propos des changements d'un produit.
+
+La prochaine étape est de construire une façon pour les utilisateur d'ajouter un produit à leur panier.
+Cette section explique comment ajouter un bouton acheter et installer un service de panier pour stocker des informations à propos des produits dans le panier.
+
